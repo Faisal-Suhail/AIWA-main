@@ -1,3 +1,4 @@
+import json
 import os
 from flask_login.utils import login_required
 from app import LookingForGame, app, db, socketio, Games, send, emit, processes, MMLock, importantbool
@@ -69,7 +70,7 @@ def register():
     if form.validate_on_submit():
         user = User(username=form.username.data, email=form.email.data)
         user.set_password(form.password.data)
-        # user.group = 'AI'
+        user.group = 'AI'
         db.session.add(user)
         db.session.commit()
         flash('Congratulations, you are now a registered user!')
@@ -484,6 +485,7 @@ def registerSid(data):
         print('Not an error just being cute')
 
 
+
 def findPlayer(data):
     for game in Games:
         if game.player1.name == data:
@@ -522,8 +524,8 @@ def EndGameAI(game):
     m.player1messages = game.player1msgs
     m.player2messages = game.player2msgs
     m.aimatch = game.ai
-    m.player1score = game.p1score()
-    m.player2score = game.p2score()
+    m.player1score = game.p1score
+    m.player2score = game.p2score
 
     db.session.commit()
     # Remove the game
@@ -558,7 +560,6 @@ def EndGame(game):
     db.session.commit()
     # Remove the game
     Games.remove(game)
-
 
 @app.route('/test')
 @login_required

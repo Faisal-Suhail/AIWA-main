@@ -17,7 +17,7 @@ def Matchmake():
     if chkusr.group == 'AI':
         prob = random.randint(1, 10)
         # Proability for AI match
-        if prob in range(11, 32):
+        if prob in range(1, 11):
             time.sleep(1)
             return matchmakeAI()
         # prob = random.randint(1, 10)
@@ -118,12 +118,12 @@ def makegame(thissuser, ai, g):
         thisgame = game(p1 = thissuser, p2 = g)
         thisgame.ai = 1
         thisgame.maxRound = random.randint(8, 12)
-        thisgame.maxRound = 3 # Expire
+        # thisgame.maxRound = 3 # Expire
         Games.append(thisgame)
     # human vs human
     else:
         thisgame = game(p1 = thissuser, p2 = LookingForGame[0])
         thisgame.maxRound = random.randint(8, 12)
-        thisgame.maxRound = 3 # Expire
+        # thisgame.maxRound = 3 # Expire
         Games.append(thisgame)
     return thisgame   

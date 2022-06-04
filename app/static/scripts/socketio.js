@@ -6,7 +6,9 @@ document.addEventListener('DOMContentLoaded', () =>{
 
     // Register the session-id upon connection
     socket.on('connect', ()=>{
-        socket.emit('register sid', username)
+        socket.emit('register sid', username);
+        socket.emit('Left', username);
+        console.log(`https://${document.domain}/EndGame`)
     })
 
     // Display the message upon receipt of message
