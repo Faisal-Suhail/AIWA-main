@@ -3,7 +3,7 @@ import os
 from flask_login.utils import login_required
 from app import LookingForGame, app, db, socketio, Games, send, emit, processes, MMLock, importantbool
 from app.models import User, Match
-from flask import render_template, flash, redirect, url_for, session, request
+from flask import jsonify,render_template, flash, redirect, url_for, session, request
 from app.forms import *
 from flask_login import current_user, login_user, logout_user
 from werkzeug.urls import url_parse
@@ -70,7 +70,7 @@ def register():
     if form.validate_on_submit():
         user = User(username=form.username.data, email=form.email.data)
         user.set_password(form.password.data)
-        user.group = 'AI'
+        # user.group = 'AI'
         db.session.add(user)
         db.session.commit()
         flash('Congratulations, you are now a registered user!')
@@ -498,7 +498,6 @@ def findPlayer(data):
 
 
 def findTheGame(data):
-    
     print(f'Current games {len(Games)}')
     for game in Games:
         print(f'game is {game.player1.name}')
@@ -512,7 +511,7 @@ def findTheGame(data):
 def EndGameAI(game):
     # End game for client
     print('done termi')
-    emit('end game', "1", room=game.player1.sid)
+    emit('end game', "1", room=game.player1.sid, namespace='/')
     # For debugging
     print(f'Player 1 choices {game.player1choices}')
     print(f'Player 2 choices {game.player2choices}')
@@ -530,6 +529,7 @@ def EndGameAI(game):
     db.session.commit()
     # Remove the game
     path = f'app/AI/pickledgames{game.id}'
+    game.aiHandler.terminate()
     Games.remove(game)
     os.remove(f"{path}/game")
 
@@ -543,8 +543,8 @@ def fetchProcess(name):
 
 
 def EndGame(game):
-    emit('end game', "1", room=game.player1.sid)
-    emit('end game', "1", room=game.player2.sid)
+    emit('end game', "1", room=game.player1.sid, namespace='/')
+    emit('end game', "1", room=game.player2.sid, namespace='/')
     print(f'Player 1 choices {game.player1choices}')
     print(f'Player 2 choices {game.player2choices}')
     print(f'Current round {game.round} out of {game.maxRound}')
@@ -561,10 +561,22 @@ def EndGame(game):
     # Remove the game
     Games.remove(game)
 
-@app.route('/test')
+# When they leave the match while it's running
+@app.route('/end',methods = ['POST', 'GET'])
 @login_required
-def test():
-    return render_template('play.html', title='test')
+def ImproperLeave():
+    print('disconnecting')
+    game = findTheGame(current_user.username)
+    if game == None:
+        print("Other player disconnected first")
+        return "The other player already closed the game"
+    if game.ai == 1:
+        EndGameAI(game)
+        print("Ended an AI game improperly")
+    else:
+        EndGame(game)
+        print("Ended a pvp game improperly")
+    return "Success"
 
 
 Acts = ['AC', 'AD', 'BC', 'BD']

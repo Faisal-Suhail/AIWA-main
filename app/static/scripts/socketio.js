@@ -9,7 +9,16 @@ document.addEventListener('DOMContentLoaded', () =>{
         socket.emit('register sid', username);
         socket.emit('Left', username);
         console.log(`https://${document.domain}/EndGame`)
+
+        
     })
+    // On closing the windows, make sure the game is closed properly
+    window.onunload = (event) => {
+        if (gameIsOver == false){
+            navigator.sendBeacon("/end", "1");
+        }
+        console.log('The page is unloaded');
+    };
 
     // Display the message upon receipt of message
     socket.on('message', data=>{
@@ -38,6 +47,7 @@ document.addEventListener('DOMContentLoaded', () =>{
         document.querySelector('#coop').disabled = true;
         document.querySelector('#defect').disabled = true;
         document.querySelector('#send_msg').disabled = true;
+        gameIsOver = true;
         const p = document.createElement('p');
         p.innerHTML = `Game has ended`;
         document.querySelector('#dsply_msgs').append(p);

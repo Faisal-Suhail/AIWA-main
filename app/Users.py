@@ -33,6 +33,7 @@ class game():
         self.aimes = ''
         self.p1score = 0
         self.p2score = 0
+        self.aiHandler = None
 
 class aigame():
     def __init__(self):

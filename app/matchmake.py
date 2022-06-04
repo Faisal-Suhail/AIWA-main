@@ -116,6 +116,7 @@ def makegame(thissuser, ai, g):
         AI.stdin.flush()
         AI.stdin.write(b"python tester_2.py\r\n")
         thisgame = game(p1 = thissuser, p2 = g)
+        thisgame.aiHandler = AI
         thisgame.ai = 1
         thisgame.maxRound = random.randint(8, 12)
         # thisgame.maxRound = 3 # Expire

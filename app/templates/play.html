@@ -186,10 +186,11 @@
     {{ super() }}
     <!-- Storing Username -->
     <script type="text/javascript">
-        const username = `{{ username }}`
+        const username = `{{ username }}`;
+        var gameIsOver = false;
     </script>
     <!-- Getting jquery -->
-    <script src="{{ url_for('static', filename='scripts/jquery.js') }}"></script>
+    <script src="{{ url_for('static', filename='scripts/jquery-1.7.1.js') }}"></script>
     <!-- Expir -->
     <script>
     var flg = true;
