@@ -9,5 +9,4 @@ The AI used in this application is taken from the paper (Jacob W. Crandall et al
 -It allows you to edit some details in your profile.
 -It allows you to play with an AI or with a human player.
 ## Screenshots of the App
-![image]
-(https://github.com/Faisal-Suhail/Prisoner-s-Dilemma-MP-game-RL-based/issues/1#issue-1276132061)
+![image]([https://github.com/Faisal-Suhail/Prisoner-s-Dilemma-MP-game-RL-based/issues/1#issue-1276132061](https://user-images.githubusercontent.com/88940462/174494694-c5359ad3-83e1-4d37-989f-fde8a14140ae.png))
